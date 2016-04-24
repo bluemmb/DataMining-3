@@ -27,7 +27,7 @@ void PrintItemsets()
 }
 
 // p = p Union q
-void Union( set<string> &p , set<string> q )
+void Union( set<string> &p , const set<string> &q )
 {
 	set<string>::iterator i = q.begin();
 	while ( i != q.end() )
@@ -38,7 +38,7 @@ void Union( set<string> &p , set<string> q )
 }
 
 // Count number of Itemsets that contain p
-int Count( set<string> &p )
+int Count( const set<string> &p )
 {
 	int ret = 0;
 	for (int k=0 ; k<Itemsets.size() ; k++)
@@ -59,8 +59,8 @@ int Count( set<string> &p )
 	return ret;
 }
 
-//
-void PrintSet( set<string> p )
+// Print Like Set
+void PrintSet( const set<string> &p )
 {
 	set<string>::iterator i = p.begin();
 	bool first = true;
