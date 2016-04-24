@@ -4,14 +4,30 @@ typedef long long int lli;
 #define mp make_pair
 using namespace std;
 
+// Important Variables
 string Path = "input.csv";
 vector< pair<int , set<string> > > Itemsets;
+map< set<string> , int > Table;
+
+// Print All Itemsets
+void PrintItemsets()
+{
+	for ( int i=0 ; i<Itemsets.size() ; i++ )
+	{
+		cout<<Itemsets[i].first<<" "<<Itemsets[i].second.size()<<" : ";
+		for ( set<string>::iterator j = Itemsets[i].second.begin() ; j!=Itemsets[i].second.end() ; j++ )
+			cout<<"|"<<*j<<"|";
+		cout<<"\n";
+	}
+}
 
 int main()
 {
 	freopen(Path.c_str() , "r" , stdin);
 	
 	bool first = true;
+	map<string , int> m;
+	
 	while ( cin.eof() == false )
 	{
 		// get whole line
@@ -48,6 +64,7 @@ int main()
 				if ( t != "" )
 				{
 					Itemsets.rbegin()->second.insert( t );
+					m[t]++;
 					t = "";
 				}
 				if ( i==sl ) break;
@@ -60,17 +77,17 @@ int main()
 		}
 	}
 	
-	/*
-	// Print data for test
-	
-	for ( int i=0 ; i<Itemsets.size() ; i++ )
+	// Create Initial Table
+	for ( map<string , int>::iterator i = m.begin() ; i != m.end() ; i++ )
 	{
-		cout<<Itemsets[i].first<<" "<<Itemsets[i].second.size()<<" : ";
-		for ( set<string>::iterator j = Itemsets[i].second.begin() ; j!=Itemsets[i].second.end() ; j++ )
-			cout<<"|"<<*j<<"|";
-		cout<<"\n";
+		set<string> s;
+		s.insert( i->first );
+		Table[ s ] = i->second;
 	}
-	*/
+	
+	// --------------------------------------------------------------------
+	
+	
 	
 	return 0;
 }
