@@ -1,0 +1,7 @@
+TID, Itemset
+10, A; B; D
+20, B; F; D
+30, A; E
+40, A; B; C; D; E; F
+50, E; A
+60, B; C; F;
