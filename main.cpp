@@ -8,6 +8,8 @@ using namespace std;
 string Path = "input.csv";
 vector< pair<int , set<string> > > Itemsets;
 map< set<string> , int > Table;
+map< set<string> , int > Help;
+const int MinSupport = 2;
 
 // Print All Itemsets
 void PrintItemsets()
@@ -18,6 +20,49 @@ void PrintItemsets()
 		for ( set<string>::iterator j = Itemsets[i].second.begin() ; j!=Itemsets[i].second.end() ; j++ )
 			cout<<"|"<<*j<<"|";
 		cout<<"\n";
+	}
+}
+
+// p = p Union q
+void Union( set<string> &p , set<string> q )
+{
+	set<string>::iterator i = q.begin();
+	while ( i != q.end() )
+	{
+		p.insert( *i );
+		i++;
+	}
+}
+
+// Count number of Itemsets that contain p
+int Count( set<string> &p )
+{
+	int ret = 0;
+	for (int k=0 ; k<Itemsets.size() ; k++)
+	{
+		set<string> &q = Itemsets[k].second;
+		
+		set<string>::iterator i = p.begin() , j = q.begin();
+		while ( i!=p.end() && j!=q.end() )
+		{
+			if ( *i == *j ) i++;
+			else if ( *j > *i ) break;
+			j++;
+		}
+		
+		ret += ( i == p.end() );
+	}
+	
+	return ret;
+}
+
+void PrintSet( set<string> &p )
+{
+	set<string>::iterator i = p.begin();
+	while ( i != p.end() )
+	{
+		cout<<"|"<<*i<<"|";
+		i++;
 	}
 }
 
@@ -82,11 +127,39 @@ int main()
 	{
 		set<string> s;
 		s.insert( i->first );
-		Table[ s ] = i->second;
+		if ( i->second >= MinSupport )
+			Table[ s ] = i->second;
 	}
 	
 	// --------------------------------------------------------------------
 	
+	
+	while ( Table.size() != 0 )
+	{
+		for ( map< set<string> , int>::iterator i = Table.begin(),j ; i != Table.end() ; i++ )
+		{
+			j = i; j++;
+			for ( ; j != Table.end() ; j++ )
+			{
+				set<string> neu;
+				Union( neu , i->first );
+				Union( neu , j->first );
+				
+				int cnt = Count(neu);
+				
+				if ( cnt >= MinSupport )
+				{
+					Help[neu] = cnt;
+				}
+			}
+		}
+		Table.clear();
+		
+		for ( map< set<string> , int >::iterator i = Help.begin() ; i != Help.end() ; i++ )
+			Table[i->first] = i->second;
+		
+		Help.clear();
+	}
 	
 	
 	return 0;
