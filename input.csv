@@ -1,7 +1,10 @@
 TID, Itemset
-10, A; B; D
-20, B; F; D
-30, A; E
-40, A; B; C; D; E; F
+10, A; B; D; G
+20, B; F; D; F
+30, A; E; C; D; E;
+40, A; B; C; D; E; F; G
 50, E; A
 60, B; C; F;
+70, A; B; D; G; H
+80, A; E; C; D; E;
+90, A; G; H

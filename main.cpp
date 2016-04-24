@@ -4,11 +4,14 @@ typedef long long int lli;
 #define mp make_pair
 using namespace std;
 
+// #define DEBUG
+
 // Important Variables
 string Path = "input.csv";
 vector< pair<int , set<string> > > Itemsets;
 map< set<string> , int > Table;
 map< set<string> , int > Help;
+map< set<string> , int > Answer;
 const int MinSupport = 2;
 
 // Print All Itemsets
@@ -56,14 +59,20 @@ int Count( set<string> &p )
 	return ret;
 }
 
-void PrintSet( set<string> &p )
+//
+void PrintSet( set<string> p )
 {
 	set<string>::iterator i = p.begin();
+	bool first = true;
+	
+	cout<<"{";
 	while ( i != p.end() )
 	{
-		cout<<"|"<<*i<<"|";
+		if ( first ) first = false; else cout<<",";
+		cout<<*i;
 		i++;
 	}
+	cout<<"}";
 }
 
 int main()
@@ -133,9 +142,11 @@ int main()
 	
 	// --------------------------------------------------------------------
 	
+	// GOOOOOOO
 	
 	while ( Table.size() != 0 )
 	{
+		// Union Sets and check their frequency then save them in Help variable
 		for ( map< set<string> , int>::iterator i = Table.begin(),j ; i != Table.end() ; i++ )
 		{
 			j = i; j++;
@@ -147,6 +158,11 @@ int main()
 				
 				int cnt = Count(neu);
 				
+				#ifdef DEBUG
+				// Print FirstSet + SecondSet = UnionOfThem -> Count
+				PrintSet(i->first); cout<<" + "; PrintSet(j->first); cout<<" = "; PrintSet(neu); cout<<" -> "; cout<<cnt<<"\n";
+				#endif
+				
 				if ( cnt >= MinSupport )
 				{
 					Help[neu] = cnt;
@@ -155,12 +171,28 @@ int main()
 		}
 		Table.clear();
 		
+		// Copy from Help -> Paste in Table , Answer
 		for ( map< set<string> , int >::iterator i = Help.begin() ; i != Help.end() ; i++ )
+		{
 			Table[i->first] = i->second;
+			Answer[i->first] = i->second;
+		}
 		
 		Help.clear();
+		
+		#ifdef DEBUG
+		cout<<"\n--------------------------------------------------------------------------------------\n";
+		#endif
 	}
 	
+	
+	cout<<"Answer : \n";
+	for ( map< set<string> , int >::iterator i = Answer.begin() ; i != Answer.end() ; i++  )
+	{
+		PrintSet( i->first );
+		cout<<" -> ";
+		cout<<i->second<<"\n";
+	}
 	
 	return 0;
 }
